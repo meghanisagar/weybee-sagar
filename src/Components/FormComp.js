@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Form,Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
 const formDetails = [
     {
@@ -106,53 +106,83 @@ const formDetails = [
 ];
 
 const FormComp = (props) => {
-    
+    const [validated, setValidated] = useState(false);
     const handleFormSubmit = e => {
         e.preventDefault();
-        let finalData = [];
-        for(let i = 0; i < formDetails.length-1 ; i++){
-            let fKey = formDetails[i].id;
-            finalData[fKey] = e.currentTarget[i].value;
-        }
+        // get object od uncontroled form data 
+        const formData = new FormData(e.target);
+        let finalData = Object.fromEntries(formData.entries());
+        debugger;
         props.userData(finalData);
-      }
+    }
+
+
+
     return (
         <> <h3>Form</h3>
-            <Form onSubmit={handleFormSubmit}>
+            <Form onSubmit={handleFormSubmit} validated={validated}>
                 {formDetails.map((ele, index) => {
                     return (
-                        <Form.Group className="mb-3" controlId={`Form.${ele.id}_${index + 1}`} id={ele.id} key={`Form.${ele.id}_${index + 1}`} >
-                            <Form.Label>{ele.label}</Form.Label>
+                        <Form.Group className="mb-3" controlId={ele.id} key={ele.id} >
+                            <Form.Label>{`${ele.label} `}</Form.Label>
                             {
-                                (ele.type == 'text'|| ele.type == 'number') && (<Form.Control type={`${ele.type}`} placeholder={`${ele.placeholder}`} required/>)
+                                (ele.type == 'text' || ele.type == 'number') && (
+                                    <><Form.Control
+                                        type={ele.type}
+                                        placeholder={ele.placeholder}
+                                        name={ele.id}
+                                        id={ele.id}
+                                        key={ele.id}
+                                        required
+                                    />
+                                        <Form.Control.Feedback type="invalid">
+                                            {`Please provide a valid ${ele.label}.`}
+                                        </Form.Control.Feedback>
+                                    </>
+                                )
                             }
                             {
                                 ele.type == 'radio' && (
-                                    ele.options.map((radioEle, radioIndex) => {
+                                    ele.options.map((radioEle) => {
                                         return (
-                                            <Form.Check
-                                                required
-                                                inline
-                                                label={radioEle.label}
-                                                name={ele.id}
-                                                type={ele.type}
-                                                id={`inline-${ele.type}`}
-                                                value={radioEle.value}
-                                            />
+                                            <>
+                                                <Form.Check
+                                                    inline
+                                                    label={radioEle.label}
+                                                    type={ele.type}
+                                                    value={radioEle.value}
+                                                    name={ele.id}
+                                                    id={ele.id}
+                                                    key={ele.id}
+                                                    required={false}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {`Please select ${ele.label}.`}
+                                                </Form.Control.Feedback>
+                                            </>
                                         )
                                     })
                                 )
                             }
                             {ele.type == 'select' && (
-                                <Form.Select aria-label={`${ele.placeholder}`}>
-                                    {ele.options.map((selectEle) => {
-                                        return (<option value={selectEle.value}>{selectEle.label}</option>)
-                                    })}
-                                </Form.Select>
+                                <>
+                                    <Form.Select
+                                        aria-label={`${ele.placeholder}`}
+                                        name={ele.id}
+                                        id={ele.id}
+                                        key={ele.id}
+                                        required={true}>
+                                        {ele.options.map((selectEle) => {
+                                            return (<option value={selectEle.value}>{selectEle.label}</option>)
+                                        })}
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {`Please select ${ele.label}.`}
+                                    </Form.Control.Feedback>
+                                </>
                             )
                             }
-
-                        </Form.Group>
+                        </Form.Group >
                     );
                 })}
                 <Button variant="primary" type="submit">
@@ -164,13 +194,3 @@ const FormComp = (props) => {
 }
 
 export default FormComp;
-
-// ele.options.map((radioele,index)=>{
-//     <Form.Check
-//         inline
-//         label="1"
-//         name="group1"
-//         type={type}
-//         id={`inline-${type}-1`}
-//     />
-//     })
