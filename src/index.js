@@ -3,11 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import thunk from 'redux-thunk'
+import { createStoreHook, Provider } from 'react-redux';
+import reducer from './state/reducers/userReducer';
+import { applyMiddleware } from 'redux';
+// import store from './state/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const store = createStoreHook(
+  reducer,
+  applyMiddleware(thunk)
+  )
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 

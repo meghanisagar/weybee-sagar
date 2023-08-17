@@ -1,8 +1,7 @@
-const updateUserInfo = (data) => {
-    return dispatch({
-        type: 'updateuserinfo',
-        payload: data
-    })
-}
+import { createStore } from "redux";
+import reducer from './reducers/userReducer';
 
-export {updateUserInfo};
+const store = createStore(reducer,[]);
+
+//export dafault store;
+export default store;
