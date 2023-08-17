@@ -1,24 +1,26 @@
-import { Card, ListGroup } from 'react-bootstrap';
+import { Card, ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
+const FormPrev = () => {
+  const userInformation = useSelector((state) => state.userInfo);
 
-const FormPrev = (props) => {
-    return (
-        <>
-            <h3>form pre..</h3>
-            {props.userData != undefined && props.userData != [] && (
-                <Card style={{ width: '18rem' }}>
-                    <Card.Header>User Details</Card.Header>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>Full name : {props.userData.name}</ListGroup.Item>
-                        <ListGroup.Item>Mobile Number : {props.userData.mobileno}</ListGroup.Item>
-                        <ListGroup.Item>Email : {props.userData.email}</ListGroup.Item>
-                        <ListGroup.Item>Gender : {props.userData.gender}</ListGroup.Item>
-                        <ListGroup.Item>Country :  </ListGroup.Item>
-                    </ListGroup>
-                </Card>
-            )}
-        </>
-    )
-}
+  return (
+    <>
+      <h3>User Information</h3>
+      {Object.keys(userInformation).length > 0 && (
+        <Card style={{ width: "18rem" }}>
+          <Card.Header>User Details</Card.Header>
+          <ListGroup variant="flush">
+            {Object.keys(userInformation).map((val, k) => (
+              <ListGroup.Item key={val}>
+                {`${val} : ${userInformation[val]}`}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Card>
+      )}
+    </>
+  );
+};
 
 export default FormPrev;

@@ -1,1 +1,1 @@
-export * as userreducer from './actions/index';
+export * as actionCreators from './actions/index';

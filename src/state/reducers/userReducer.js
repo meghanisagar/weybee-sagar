@@ -1,11 +1,9 @@
-const reducer = (state, action) => {
-    if (action.type == 'updateuserinfo') {
-        return {
-            state: action.payload
-        }
+const reducer = (state = {}, action) => {
+    if (action.type === 'updateuserinfo') {
+        return  action.payload;        
     }
-    else {
-        return { state }
+   else {
+        return state;
     }
 };
 
